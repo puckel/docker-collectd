@@ -6,26 +6,45 @@ This repository contains **Dockerfile** of [Collectd](http://collectd.org/) for 
 
 ### Base Docker Image
 
-* [puckel/debian-stable](https://registry.hub.docker.com/u/puckel/debian-stable/)
+* [puckel/docker-base](https://registry.hub.docker.com/u/puckel/docker-base/)
 
 
 ### Installation
 
 1. Install [Docker](https://www.docker.com/).
 
-2. Download [automated build](https://registry.hub.docker.com/u/puckel/collectd/) from public [Docker Hub Registry](https://registry.hub.docker.com/): `docker pull puckel/collectd`
+2. Download [automated build](https://registry.hub.docker.com/u/puckel/docker-collectd/) from public [Docker Hub Registry](https://registry.hub.docker.com/): `docker pull puckel/docker-collectd`
 
-   (alternatively, you can build an image from [Dockerfile](https://github.com/puckel/dockerfiles/))
-
+Alternatively, you can build an image from [Dockerfile](https://github.com/puckel/docker-collectd)
 
 ### Usage
 
-In addition with puckel/graphite, a basic collectd-based server monitoring. Sends stats to a container named "graphite". You can specify your collectd hostname with "-e HOST_NAME=YOURHOSTNAME" otherwise "Hostname" in collectd.conf will be the container name :
+In addition with puckel/docker-graphite or puckel/docker-influxdb, a basic collectd-based server monitoring. Sends stats to a container named "graphite", "influx" or both. You can specify your collectd hostname with "-e HOST_NAME=YOURHOSTNAME" otherwise "Hostname" in collectd.conf will be the container name :
 
+With Graphite:
 ```bash
     docker run -d \
         --link graphite:graphite \
-        --name collectd-HOSTNAME \ 
+        --name collectd-HOSTNAME \
         -e HOST_NAME=YOURHOSTNAME
-        puckel/collectd
+        puckel/docker-collectd
+```
+
+With InfluxDB:
+```bash
+    docker run -d \
+        --link influxdb:influxdb \
+        --name collectd-HOSTNAME \
+        -e HOST_NAME=YOURHOSTNAME
+        puckel/docker-collectd
+```
+
+Both:
+```bash
+    docker run -d \
+        --link graphite:graphite \
+        --link influxdb:influxdb \
+        --name collectd-HOSTNAME \
+        -e HOST_NAME=YOURHOSTNAME
+        puckel/docker-collectd
 ```
